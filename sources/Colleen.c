@@ -6,8 +6,8 @@ void func(void) {}
 int main(void)
 {
 	// Main Function
-	char *c="#include <stdio.h>%c%c// Useless Function%cvoid func(void) {}%c%cint main(void)%c{%c%c// Main Function%c%cchar *c=%c%s%c;%c%cfunc();%c%cprintf(c,10,10,10,10,10,10,10,9,10,9,34,c,34,10,9,10,9,10,9,10,10);%c%creturn (0);%c}%c";
+	char *c = "#include <stdio.h>%1$c%1$c// Useless Function%1$cvoid func(void) {}%1$c%1$cint main(void)%1$c{%1$c%2$c// Main Function%1$c%2$cchar *c = %3$c%s%3$c;%1$c%2$cfunc();%1$c%2$cprintf(c, 10, 9, 34, c);%1$c%2$creturn (0);%1$c}%1$c";
 	func();
-	printf(c,10,10,10,10,10,10,10,9,10,9,34,c,34,10,9,10,9,10,9,10,10);
+	printf(c, 10, 9, 34, c);
 	return (0);
 }
