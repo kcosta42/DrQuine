@@ -6,7 +6,7 @@
 #    By: kcosta <kcosta@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/10 10:30:17 by kcosta            #+#    #+#              #
-#    Updated: 2019/04/10 12:16:48 by kcosta           ###   ########.fr        #
+#    Updated: 2019/04/11 16:16:34 by kcosta           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,18 +17,20 @@ SULLY	:= Sully
 # ============================== #
 
 # ========== Standard ========== #
-CC		:= gcc
-FLAGS	:= -Wall -Wextra -Werror
+NASM	:= nasm
+FLAGS	:= -f macho64
+LD		:= ld
+LDFLAGS	:= -macosx_version_min 10.8 -lSystem
 # ============================== #
 
 # =========== Files ============ #
-COLLEEN_SRCS_FILE	:= Colleen.c
-GRACE_SRCS_FILE		:= Grace.c
-SULLY_SRCS_FILE		:= Sully.c
+COLLEEN_SRCS_FILE	:= Colleen.s
+GRACE_SRCS_FILE		:= Grace.s
+SULLY_SRCS_FILE		:= Sully.s
 # ============================== #
 
 # ========== Sources =========== #
-SRCS_PATH		:= sources/
+SRCS_PATH		:= ./
 COLLEEN_SRCS	:= $(addprefix $(SRCS_PATH), $(COLLEEN_SRCS_FILE))
 GRACE_SRCS		:= $(addprefix $(SRCS_PATH), $(GRACE_SRCS_FILE))
 SULLY_SRCS		:= $(addprefix $(SRCS_PATH), $(SULLY_SRCS_FILE))
@@ -36,30 +38,30 @@ SULLY_SRCS		:= $(addprefix $(SRCS_PATH), $(SULLY_SRCS_FILE))
 
 # ========== Objects =========== #
 OBJS_PATH		:= objs/
-COLLEEN_OBJS	:= $(addprefix $(OBJS_PATH), $(COLLEEN_SRCS_FILE:.c=.o))
-GRACE_OBJS		:= $(addprefix $(OBJS_PATH), $(GRACE_SRCS_FILE:.c=.o))
-SULLY_OBJS		:= $(addprefix $(OBJS_PATH), $(SULLY_SRCS_FILE:.c=.o))
+COLLEEN_OBJS	:= $(addprefix $(OBJS_PATH), $(COLLEEN_SRCS_FILE:.s=.o))
+GRACE_OBJS		:= $(addprefix $(OBJS_PATH), $(GRACE_SRCS_FILE:.s=.o))
+SULLY_OBJS		:= $(addprefix $(OBJS_PATH), $(SULLY_SRCS_FILE:.s=.o))
 # ============================== #
 
 .PHONY: all clean fclean re
 
 all: $(COLLEEN) $(GRACE) $(SULLY)
 
-$(OBJS_PATH)%.o: $(SRCS_PATH)%.c
+$(OBJS_PATH)%.o: $(SRCS_PATH)%.s
 	@mkdir $(OBJS_PATH) 2> /dev/null || true
-	$(CC) $(FLAGS) -o $@ -c $<
+	$(NASM) $(FLAGS) $< -o $@
 
 $(COLLEEN): $(COLLEEN_OBJS)
-	$(CC) $(FLAGS) $(COLLEEN_OBJS) -o $@
+	$(LD) $(LDFLAGS) $(COLLEEN_OBJS) -o $@
 
 $(GRACE): $(GRACE_OBJS)
-	$(CC) $(FLAGS) $(GRACE_OBJS) -o $@
+	$(LD) $(LDFLAGS) $(GRACE_OBJS) -o $@
 
 $(SULLY): $(SULLY_OBJS)
-	$(CC) $(FLAGS) $(SULLY_OBJS) -o $@
+	$(LD) $(LDFLAGS) $(SULLY_OBJS) -o $@
 
 clean:
-	@rm -fv $(COLLEEN_OBJS) $(GRACE_OBJS) Grace_kid.c $(SULLY_OBJS)
+	@rm -fv $(COLLEEN_OBJS) $(GRACE_OBJS) Grace_kid.s $(SULLY_OBJS)
 	@rmdir $(OBJS_PATH) 2> /dev/null || true
 
 fclean: clean
